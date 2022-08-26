@@ -67,8 +67,13 @@
 					) {
 						if (string[i] != " ") {
 							var ch = string[i].toLowerCase();
-							temp = histogram[ch];
-							histogram[ch] = temp ? temp + 1 : 1;
+							temp = histogram.get(ch);
+							if (temp) {
+								temp += 1;
+							} else {
+								temp = 1;
+							}
+							histogram.set(ch, temp);
 							counter++;
 						}
 						out += string[i];
@@ -81,12 +86,11 @@
 					out = "Error: <br/>" + out;
 					document.getElementById("output").innerHTML = out;
 				} else {
-					out = "Total Characters: <br/>" + counter;
-					histogram.forEach(function (value, key) {
-						console.log(1);
-						out += key + ":" + value + "<br/>";
+					out = "Total Characters: <br/>" + counter + "<br/>";
+					var sorted = new Map([...histogram.entries()].sort());
+					sorted.forEach((value, key) => {
+						out += key + ": " + value + "<br/>";
 					});
-					console.log(histogram);
 					document.getElementById("output").innerHTML = out;
 				}
 			}
