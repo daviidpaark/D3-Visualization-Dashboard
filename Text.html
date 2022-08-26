@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>CSE 332</title>
+		<style>
+			p {
+				font-family: Arial, Helvetica, sans-serif;
+				font-size: 2em;
+			}
+			mark {
+				background-color: red;
+				color: black;
+			}
+			.button {
+				background-color: green;
+				color: white;
+				border: none;
+				padding: 10px;
+				text-align: center;
+				font-size: 1.2em;
+			}
+		</style>
+	</head>
+	<body>
+		<p>Enter some text:</p>
+		<form>
+			<input
+				type="text"
+				id="input"
+				size="20"
+				style="font-size: 1.5em"
+			/><br /><br />
+			<input
+				class="button"
+				type="button"
+				id="submit"
+				onclick="myFunction()"
+				value="Submit"
+			/>
+		</form>
+		<p id="output"></p>
+
+		<script>
+			// Handle "Enter" keypress
+			var input = document.getElementById("input");
+			input.addEventListener("keypress", function (event) {
+				if (event.key === "Enter") {
+					event.preventDefault();
+					document.getElementById("submit").click();
+				}
+			});
+
+			function myFunction() {
+				var string = document.getElementById("input").value;
+				var err = 0;
+				var out = "";
+				var counter = 0;
+				var histogram = new Map();
+				var temp;
+				for (var i = 0; i < string.length; i++) {
+					if (
+						string[i].toUpperCase() != string[i].toLowerCase() ||
+						string[i] == " "
+					) {
+						if (string[i] != " ") {
+							var ch = string[i].toLowerCase();
+							temp = histogram[ch];
+							histogram[ch] = temp ? temp + 1 : 1;
+							counter++;
+						}
+						out += string[i];
+					} else {
+						err = 1;
+						out += "<mark>" + string[i] + "</mark>";
+					}
+				}
+				if (err == 1) {
+					out = "Error: <br/>" + out;
+					document.getElementById("output").innerHTML = out;
+				} else {
+					out = "Total Characters: <br/>" + counter;
+					histogram.forEach(function (value, key) {
+						console.log(1);
+						out += key + ":" + value + "<br/>";
+					});
+					console.log(histogram);
+					document.getElementById("output").innerHTML = out;
+				}
+			}
+		</script>
+	</body>
+</html>
