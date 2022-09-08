@@ -8,7 +8,7 @@
 		<style>
 			p {
 				font-family: Arial, Helvetica, sans-serif;
-				font-size: 2em;
+				font-size: 1.5em;
 			}
 			mark {
 				background-color: red;
@@ -30,7 +30,7 @@
 			<input
 				type="text"
 				id="input"
-				size="20"
+				size="100"
 				style="font-size: 1.5em"
 			/><br /><br />
 			<input
@@ -57,16 +57,25 @@
 				var string = document.getElementById("input").value;
 				var err = 0;
 				var out = "";
-				var counter = 0;
+				var charCounter = 0;
+				var whitespaces = 0;
 				var histogram = new Map();
 				var temp;
+				// Iterate through string
 				for (var i = 0; i < string.length; i++) {
+					// Check for alpha characters + punctuation
 					if (
 						string[i].toUpperCase() != string[i].toLowerCase() ||
-						string[i] == " "
+						string[i] == " " ||
+						"'" ||
+						"." ||
+						"!" ||
+						"?"
 					) {
-						if (string[i] != " ") {
+						// Add characters to histogram and charCounter
+						if (string[i].toUpperCase() != string[i].toLowerCase()) {
 							var ch = string[i].toLowerCase();
+							// Add character to histogram
 							temp = histogram.get(ch);
 							if (temp) {
 								temp += 1;
@@ -74,19 +83,35 @@
 								temp = 1;
 							}
 							histogram.set(ch, temp);
-							counter++;
+							charCounter++;
+						}
+						// Add whitespaces
+						if (string[i] == " " && string[i + 1]) {
+							whitespaces++;
 						}
 						out += string[i];
-					} else {
+					}
+					// Mark error if non-valid character
+					else {
 						err = 1;
 						out += "<mark>" + string[i] + "</mark>";
 					}
 				}
+				// Display marked error
 				if (err == 1) {
 					out = "Error: <br/>" + out;
 					document.getElementById("output").innerHTML = out;
 				} else {
-					out = "Total Characters: <br/>" + counter + "<br/>";
+					// Display total character count + whitespaces
+					out =
+						"Total Characters: <br/>" +
+						charCounter +
+						"<br/> Whitespaces: <br/>" +
+						whitespaces +
+						"<br/> Total Words: <br/>" +
+						(whitespaces + 1) +
+						"<br/><br/> Histogram: <br/>";
+					// Sort histogram alphabetically and display
 					var sorted = new Map([...histogram.entries()].sort());
 					sorted.forEach((value, key) => {
 						out += key + ": " + value + "<br/>";
