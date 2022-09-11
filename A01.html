@@ -30,7 +30,7 @@
 			<input
 				type="text"
 				id="input"
-				size="100"
+				size="150"
 				style="font-size: 1.5em"
 			/><br /><br />
 			<input
@@ -55,6 +55,11 @@
 
 			function myFunction() {
 				var string = document.getElementById("input").value;
+				// Clear output on empty string
+				if (string.length == 0) {
+					document.getElementById("output").innerHTML = "";
+					return;
+				}
 				var err = 0;
 				var out = "";
 				var charCounter = 0;
@@ -74,6 +79,18 @@
 					) {
 						// Add characters to histogram and charCounter
 						if (string[i].toUpperCase() != string[i].toLowerCase()) {
+							// Basic spellcheck
+							// Error on 3 duplicate consecutive characters
+							if (string[i - 1] && string[i + 1]) {
+								if (string[i - 1] == string[i] && string[i + 1] == string[i]) {
+									err = 1;
+									console.log(string.substring(i - 1, i + 2));
+									out = out.slice(0, -1);
+									out += "<mark>" + string.substring(i - 1, i + 2) + "</mark>";
+									i++;
+									continue;
+								}
+							}
 							var ch = string[i].toLowerCase();
 							// Add character to histogram
 							temp = histogram.get(ch);
