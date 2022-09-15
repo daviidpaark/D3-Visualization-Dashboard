@@ -5,6 +5,7 @@
 		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 		<title>CSE 332</title>
+		<script src="https://d3js.org/d3.v7.min.js"></script>
 		<style>
 			p {
 				font-family: Arial, Helvetica, sans-serif;
@@ -84,7 +85,6 @@
 							if (string[i - 1] && string[i + 1]) {
 								if (string[i - 1] == string[i] && string[i + 1] == string[i]) {
 									err = 1;
-									console.log(string.substring(i - 1, i + 2));
 									out = out.slice(0, -1);
 									out += "<mark>" + string.substring(i - 1, i + 2) + "</mark>";
 									i++;
@@ -130,10 +130,63 @@
 						"<br/><br/> Histogram: <br/>";
 					// Sort histogram alphabetically and display
 					var sorted = new Map([...histogram.entries()].sort());
-					sorted.forEach((value, key) => {
-						out += key + ": " + value + "<br/>";
-					});
 					document.getElementById("output").innerHTML = out;
+
+					var width = 1000;
+					var height = 500;
+					var barPadding = 1;
+
+					var graph = d3
+						.select("body")
+						.append("svg")
+						.attr("width", width)
+						.attr("height", height);
+
+					graph
+						.selectAll("rect")
+						.data([...sorted.values()])
+						.enter()
+						.append("rect")
+						.attr("x", function (d, i) {
+							return i * (width / sorted.size);
+						})
+						.attr("y", function (d) {
+							return height - d * 25;
+						})
+						.attr("width", width / sorted.size - barPadding)
+						.attr("height", function (d) {
+							return d * 25;
+						})
+						.attr("fill", "green");
+
+					graph
+						.selectAll("text")
+						.data([...sorted.values()])
+						.enter()
+						.append("text")
+						.text(function (d) {
+							return d;
+						})
+						.attr("text-anchor", "middle")
+						.attr("x", function (d, i) {
+							return (
+								i * (width / sorted.size) +
+								(width / sorted.size - barPadding) / 2
+							);
+						})
+						.attr("y", function (d) {
+							return height - d * 25 + 20;
+						})
+						.attr("font-family", "sans-serif")
+						.attr("font-size", "15px")
+						.attr("fill", "white");
+
+					let letter = d3
+						.scaleBand()
+						.domain([...sorted.keys()])
+						.range([0, width]);
+					let axis = d3.axisBottom(letter);
+					graph.append("g").call(axis);
 				}
 			}
 		</script>
