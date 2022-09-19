@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<title>CSE 332</title>
+		<link
+			href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css"
+			rel="stylesheet"
+			integrity="sha384-iYQeCzEYFbKjA/T2uDLTpkwGzCiq6soy8tYaI1GyVh/UjpbCx/TYkiZhlZB6+fzT"
+			crossorigin="anonymous"
+		/>
+	</head>
+	<body>
+		<div class="container-fluid">
+			<h1>Project 2</h1>
+			<div class="dropdown">
+				<button
+					class="btn btn-secondary dropdown-toggle"
+					type="button"
+					data-bs-toggle="dropdown"
+				>
+					Select a variable
+				</button>
+				<ul class="dropdown-menu">
+					<li>
+						<button class="dropdown-item" onclick="handleAction()">
+							Action
+						</button>
+					</li>
+					<li><button class="dropdown-item">Another action</button></li>
+					<li><button class="dropdown-item">Something else here</button></li>
+				</ul>
+			</div>
+			<script
+				src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/js/bootstrap.bundle.min.js"
+				integrity="sha384-u1OknCvxWvY5kfmNBILK2hRnQC3Pr17a+RTT6rIHI7NnikvbZlHgTPOOmMi466C8"
+				crossorigin="anonymous"
+			></script>
+			<script src="https://d3js.org/d3.v7.min.js"></script>
+			<script>
+				function handleAction() {
+					d3.csv("/data/AirplaneCrashes.csv", (data) => {
+						console.log(data);
+					});
+				}
+			</script>
+		</div>
+	</body>
+</html>
