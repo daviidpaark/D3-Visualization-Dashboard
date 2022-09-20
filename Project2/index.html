@@ -24,27 +24,114 @@
 				</button>
 				<ul class="dropdown-menu">
 					<li>
-						<button class="dropdown-item" onclick="handleAction()">
-							Action
+						<button
+							class="dropdown-item"
+							onclick="display(this.value)"
+							value="Aboard"
+						>
+							Aboard
 						</button>
 					</li>
-					<li><button class="dropdown-item">Another action</button></li>
-					<li><button class="dropdown-item">Something else here</button></li>
+					<li>
+						<button
+							class="dropdown-item"
+							onclick="display(this.value)"
+							value="AboardPassengers"
+						>
+							Aboard Passengers
+						</button>
+					</li>
+					<li>
+						<button
+							class="dropdown-item"
+							onclick="display(this.value)"
+							value="AboardCrew"
+						>
+							Aboard Crew
+						</button>
+					</li>
+					<li>
+						<button
+							class="dropdown-item"
+							onclick="display(this.value)"
+							value="Fatalities"
+						>
+							Fatalities
+						</button>
+					</li>
+					<li>
+						<button
+							class="dropdown-item"
+							onclick="display(this.value)"
+							value="FatalitiesPassengers"
+						>
+							Fatalities Passengers
+						</button>
+					</li>
+					<li>
+						<button
+							class="dropdown-item"
+							onclick="display(this.value)"
+							value="FatalitiesCrew"
+						>
+							Fatalities Crew
+						</button>
+					</li>
+					<li>
+						<button
+							class="dropdown-item"
+							onclick="display(this.value)"
+							value="Ground"
+						>
+							Ground
+						</button>
+					</li>
+					<li>
+						<button
+							class="dropdown-item"
+							onclick="display(this.value)"
+							value="Location"
+						>
+							Location
+						</button>
+					</li>
+					<li>
+						<button
+							class="dropdown-item"
+							onclick="display(this.value)"
+							value="Operator"
+						>
+							Operator
+						</button>
+					</li>
+					<li>
+						<button
+							class="dropdown-item"
+							onclick="display(this.value)"
+							value="Route"
+						>
+							Route
+						</button>
+					</li>
+					<li>
+						<button
+							class="dropdown-item"
+							onclick="display(this.value)"
+							value="ACType"
+						>
+							AC Type
+						</button>
+					</li>
 				</ul>
 			</div>
+			<div id="graph"></div>
 			<script
 				src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/js/bootstrap.bundle.min.js"
 				integrity="sha384-u1OknCvxWvY5kfmNBILK2hRnQC3Pr17a+RTT6rIHI7NnikvbZlHgTPOOmMi466C8"
 				crossorigin="anonymous"
 			></script>
 			<script src="https://d3js.org/d3.v7.min.js"></script>
-			<script>
-				function handleAction() {
-					d3.csv("/data/AirplaneCrashes.csv", (data) => {
-						console.log(data);
-					});
-				}
-			</script>
+			<script src="/scripts/displayCharts.js"></script>
 		</div>
 	</body>
 </html>
