@@ -19,7 +19,7 @@ function BarChart(data, { count, x, y, yLabel } = {}) {
 
 	const xScale = d3.scaleBand(xDomain, xRange).padding(xPadding);
 	const yScale = yType(yDomain, yRange);
-	const xAxis = d3.axisBottom(xScale).tickSizeOuter(0);
+	const xAxis = d3.axisBottom(xScale);
 	const yAxis = d3.axisLeft(yScale).ticks(height / 20);
 
 	title = (i) => yLabel + ": " + `${X[i]}` + "\n" + "# of Models: " + `${Y[i]}`;
@@ -36,6 +36,7 @@ function BarChart(data, { count, x, y, yLabel } = {}) {
 		.append("g")
 		.attr("transform", `translate(${marginLeft},0)`)
 		.call(yAxis)
+		.call((g) => g.select(".domain").remove())
 		.call((g) =>
 			g
 				.selectAll(".tick line")
@@ -55,7 +56,7 @@ function BarChart(data, { count, x, y, yLabel } = {}) {
 
 	const bar = svg
 		.append("g")
-		.attr("fill", "green")
+		.attr("fill", "#4770af")
 		.selectAll("rect")
 		.data(X)
 		.join("rect")
@@ -69,7 +70,8 @@ function BarChart(data, { count, x, y, yLabel } = {}) {
 	svg
 		.append("g")
 		.attr("transform", `translate(0,${height - marginBottom})`)
-		.call(xAxis);
+		.call(xAxis)
+		.call((g) => g.select(".domain").remove());
 }
 
 function Histogram(data, { x, y, yLabel } = {}) {
@@ -83,6 +85,7 @@ function Histogram(data, { x, y, yLabel } = {}) {
 	xRange = [marginLeft, width - marginRight];
 	yType = d3.scaleLinear;
 	yRange = [height - marginBottom, marginTop];
+	xPadding = 0.1;
 
 	const X = d3.map(data, x);
 	const Y = d3.map(data, y);
@@ -90,9 +93,9 @@ function Histogram(data, { x, y, yLabel } = {}) {
 	xDomain = new d3.InternSet(X);
 	yDomain = [0, d3.max(Y)];
 
-	const xScale = d3.scaleBand(xDomain, xRange);
+	const xScale = d3.scaleBand(xDomain, xRange).padding(xPadding);
 	const yScale = yType(yDomain, yRange);
-	const xAxis = d3.axisBottom(xScale).tickSizeOuter(0);
+	const xAxis = d3.axisBottom(xScale);
 	const yAxis = d3.axisLeft(yScale).ticks(height / 20);
 
 	title = (i) =>
@@ -110,6 +113,7 @@ function Histogram(data, { x, y, yLabel } = {}) {
 		.append("g")
 		.attr("transform", `translate(${marginLeft},0)`)
 		.call(yAxis)
+		.call((g) => g.select(".domain").remove())
 		.call((g) =>
 			g
 				.selectAll(".tick line")
@@ -129,74 +133,56 @@ function Histogram(data, { x, y, yLabel } = {}) {
 
 	const bar = svg
 		.append("g")
-		.attr("fill", "green")
+		.attr("fill", "#4770af")
 		.selectAll("rect")
 		.data(X)
 		.join("rect")
 		.attr("x", (i) => xScale(X[i]))
 		.attr("y", (i) => yScale(Y[i]))
 		.attr("height", (i) => yScale(0) - yScale(Y[i]))
-		.attr("width", xScale.bandwidth() + 1);
+		.attr("width", xScale.bandwidth());
 
 	bar.append("title").text(title);
 
 	svg
 		.append("g")
 		.attr("transform", `translate(0,${height - marginBottom})`)
-		.call(xAxis);
+		.call(xAxis)
+		.call((g) => g.select(".domain").remove())
+		.selectAll("text")
+		.attr("x", 10)
+		.attr("y", -2)
+		.attr("dy", "0.5em")
+		.attr("transform", "rotate(90)")
+		.style("text-anchor", "start");
 }
 
-function PieChart(
-	data,
-	{
-		name, // given d in data, returns the (ordinal) label
-		value, // given d in data, returns the (quantitative) value
-		title, // given d in data, returns the title text
-		width = 640, // outer width, in pixels
-		height = 400, // outer height, in pixels
-		innerRadius = 0, // inner radius of pie, in pixels (non-zero for donut)
-		outerRadius = Math.min(width, height) / 2, // outer radius of pie, in pixels
-		labelRadius = innerRadius * 0.2 + outerRadius * 0.8, // center radius of labels
-		format = ",", // a format specifier for values (in the label)
-		names, // array of names (the domain of the color scale)
-		colors, // array of colors for names
-		stroke = innerRadius > 0 ? "none" : "white", // stroke separating widths
-		strokeWidth = 1, // width of stroke separating wedges
-		strokeLinejoin = "round", // line join of stroke separating wedges
-		padAngle = stroke === "none" ? 1 / outerRadius : 0, // angular separation between wedges
-	} = {}
-) {
-	// Compute values.
+function PieChart(data, { name, value, label } = {}) {
+	width = 700;
+	height = 500;
+	innerRadius = 0;
+	outerRadius = Math.min(width, height) / 2;
+	labelRadius = innerRadius * 0.2 + outerRadius * 0.8;
+	stroke = innerRadius > 0 ? "none" : "white";
+	strokeWidth = 1;
+	strokeLinejoin = "round";
+	padAngle = stroke === "none" ? 1 / outerRadius : 0;
+
 	const N = name;
 	const V = value;
 	const I = d3.range(N.length).filter((i) => !isNaN(V[i]));
 
-	// Unique the names.
-	if (names === undefined) names = N;
-	names = new d3.InternSet(names);
+	names = new d3.InternSet(N);
+	colors = d3.schemeSpectral[names.size];
+	colors = d3.quantize(
+		(t) => d3.interpolateSpectral(t * 0.8 + 0.1),
+		names.size
+	);
 
-	// Chose a default color scheme based on cardinality.
-	if (colors === undefined) colors = d3.schemeSpectral[names.size];
-	if (colors === undefined)
-		colors = d3.quantize(
-			(t) => d3.interpolateSpectral(t * 0.8 + 0.1),
-			names.size
-		);
-
-	// Construct scales.
 	const color = d3.scaleOrdinal(names, colors);
 
-	// Compute titles.
-	if (title === undefined) {
-		const formatValue = d3.format(format);
-		title = (i) => `${N[i]}\n${formatValue(V[i])}`;
-	} else {
-		const O = d3.map(data, (d) => d);
-		const T = title;
-		title = (i) => T(O[i], i, data);
-	}
+	title = (i) => `${N[i]}` + "\n" + `${V[i]}`;
 
-	// Construct arcs.
 	const arcs = d3
 		.pie()
 		.padAngle(padAngle)
@@ -246,6 +232,96 @@ function PieChart(
 		.attr("font-weight", (_, i) => (i ? null : "bold"))
 		.text((d) => d);
 }
+
+function Scatterplot(data, { x, y, xLabel, yLabel } = {}) {
+	marginTop = 20;
+	marginRight = 30;
+	marginBottom = 30;
+	marginLeft = 40;
+	width = 1500;
+	height = 500;
+	xType = d3.scaleLinear;
+	xRange = [marginLeft, width - marginRight];
+	yType = d3.scaleLinear;
+	yRange = [height - marginBottom, marginTop];
+
+	const X = d3.map(data, x);
+	const Y = d3.map(data, y);
+	const I = d3.range(X.length).filter((i) => !isNaN(X[i]) && !isNaN(Y[i]));
+
+	xDomain = d3.extent(X);
+	yDomain = d3.extent(Y);
+
+	const xScale = xType(xDomain, xRange);
+	const yScale = yType(yDomain, yRange);
+	const xAxis = d3.axisBottom(xScale).ticks(width / 80);
+	const yAxis = d3.axisLeft(yScale).ticks(height / 50);
+
+	const svg = d3
+		.select("#graph")
+		.append("svg")
+		.attr("width", width)
+		.attr("height", height)
+		.attr("viewBox", [0, 0, width, height])
+		.attr("style", "max-width: 100%; height: auto; height: intrinsic;");
+
+	svg
+		.append("g")
+		.attr("transform", `translate(0,${height - marginBottom})`)
+		.call(xAxis)
+		.call((g) => g.select(".domain").remove())
+		.call((g) =>
+			g
+				.selectAll(".tick line")
+				.clone()
+				.attr("y2", marginTop + marginBottom - height)
+				.attr("stroke-opacity", 0.1)
+		)
+		.call((g) =>
+			g
+				.append("text")
+				.attr("x", width)
+				.attr("y", marginBottom - 4)
+				.attr("fill", "currentColor")
+				.attr("text-anchor", "end")
+				.text(xLabel)
+		);
+
+	svg
+		.append("g")
+		.attr("transform", `translate(${marginLeft},0)`)
+		.call(yAxis)
+		.call((g) => g.select(".domain").remove())
+		.call((g) =>
+			g
+				.selectAll(".tick line")
+				.clone()
+				.attr("x2", width - marginLeft - marginRight)
+				.attr("stroke-opacity", 0.1)
+		)
+		.call((g) =>
+			g
+				.append("text")
+				.attr("x", -marginLeft)
+				.attr("y", 10)
+				.attr("fill", "currentColor")
+				.attr("text-anchor", "start")
+				.text(yLabel)
+		);
+
+	svg
+		.append("g")
+		.attr("fill", "#4770af")
+		.attr("stroke", "#4770af")
+		.attr("stroke-width", 1)
+		.selectAll("circle")
+		.data(I)
+		.join("circle")
+		.attr("cx", (i) => xScale(X[i]))
+		.attr("cy", (i) => yScale(Y[i]))
+		.attr("r", 2);
+}
+
 async function display(variable) {
 	const svg = d3.select("#graph").selectAll("svg").remove();
 	var data = await d3.csv("/data/cameras.csv");
@@ -262,9 +338,12 @@ async function display(variable) {
 	var sortedValues = new Map([...count.entries()].sort((a, b) => b[1] - a[1]));
 	if (sortedValues.size > 6) {
 		temp = Array.from(sortedValues).slice(5, sortedValues.size);
-		console.log(temp);
-		// Split map and combine remaining values
-		map = new Map(temp);
+		sortedValues = new Map(Array.from(sortedValues).slice(0, 5));
+		total = 0;
+		for (var i = 0; i < temp.length; i++) {
+			total += temp[i][1];
+		}
+		sortedValues.set("Other", total);
 	}
 
 	if (variable != "Release_date" && variable != "Effective_pixels") {
@@ -284,5 +363,29 @@ async function display(variable) {
 	PieChart(data, {
 		name: Array.from(sortedValues.keys()),
 		value: Array.from(sortedValues.values()),
+		label: variable,
 	});
+}
+
+async function scatter() {
+	const svg = d3.select("#graph").selectAll("svg").remove();
+	var data = await d3.csv("/data/cameras.csv");
+
+	Scatterplot(data, {
+		x: (d) => parseInt(d[x]),
+		y: (d) => parseInt(d[y]),
+		xLabel: x,
+		yLabel: y,
+	});
+}
+
+var x = 0;
+var y = 0;
+
+function setX(value) {
+	x = value;
+}
+
+function setY(value) {
+	y = value;
 }

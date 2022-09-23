@@ -114,6 +114,55 @@
 						</button>
 					</li>
 				</ul>
+				<div class="row" style="padding: 15px">
+					<div class="col-4">
+						<select class="form-select" onclick="setX(this.value)">
+							<option selected>Select X</option>
+							<option value="Max_resolution" onclick="">Max Resolution</option>
+							<option value="Low_resolution" onclick="">Low Resolution</option>
+							<option value="Effective_pixels" onclick="">
+								Effective Pixels
+							</option>
+							<option value="Zoom_wide" onclick="">Zoom Wide</option>
+							<option value="Zoom_tele" onclick="">Zoom Tele</option>
+							<option value="Normal_focus_range" onclick="">
+								Normal Focus Range
+							</option>
+							<option value="Macro_focus_range" onclick="">
+								Macro Focus Range
+							</option>
+							<option value="Storage" onclick="">Storage</option>
+							<option value="Weight" onclick="">Weight</option>
+							<option value="Price" onclick="">Price</option>
+						</select>
+					</div>
+					<div class="col-4">
+						<select class="form-select" onclick="setY(this.value)">
+							<option selected>Select Y</option>
+							<option value="Max_resolution" onclick="">Max Resolution</option>
+							<option value="Low_resolution" onclick="">Low Resolution</option>
+							<option value="Effective_pixels" onclick="">
+								Effective Pixels
+							</option>
+							<option value="Zoom_wide" onclick="">Zoom Wide</option>
+							<option value="Zoom_tele" onclick="">Zoom Tele</option>
+							<option value="Normal_focus_range" onclick="">
+								Normal Focus Range
+							</option>
+							<option value="Macro_focus_range" onclick="">
+								Macro Focus Range
+							</option>
+							<option value="Storage" onclick="">Storage</option>
+							<option value="Weight" onclick="">Weight</option>
+							<option value="Price" onclick="">Price</option>
+						</select>
+					</div>
+					<div class="col-4">
+						<button type="button" class="btn btn-primary" onclick="scatter()">
+							Scatterplot
+						</button>
+					</div>
+				</div>
 			</div>
 			<div class="container-fluid" id="graph"></div>
 			<script
