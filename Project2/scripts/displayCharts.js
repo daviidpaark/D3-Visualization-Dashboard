@@ -9,20 +9,14 @@ function BarChart(data, { count, x, y, yLabel } = {}) {
 	xRange = [marginLeft, width - marginRight];
 	yType = d3.scaleLinear;
 	yRange = [height - marginBottom, marginTop];
-	xPadding = 0.1;
+	padding = 0.1;
 
-	const X = x;
-	const Y = y;
-
-	xDomain = X;
-	yDomain = [0, d3.max(Y)];
-
-	const xScale = d3.scaleBand(xDomain, xRange).padding(xPadding);
-	const yScale = yType(yDomain, yRange);
+	const xScale = d3.scaleBand(x, xRange).padding(padding);
+	const yScale = d3.scaleLinear([0, d3.max(y)], yRange);
 	const xAxis = d3.axisBottom(xScale);
 	const yAxis = d3.axisLeft(yScale).ticks(height / 20);
 
-	title = (i) => yLabel + ": " + `${X[i]}` + "\n" + "# of Models: " + `${Y[i]}`;
+	title = (i) => yLabel + ": " + `${x[i]}` + "\n" + "# of Models: " + `${y[i]}`;
 
 	const svg = d3
 		.select("#graph")
@@ -58,10 +52,10 @@ function BarChart(data, { count, x, y, yLabel } = {}) {
 		.append("g")
 		.attr("fill", "#4770af")
 		.selectAll("rect")
-		.data(X)
+		.data(x)
 		.join("rect")
-		.attr("x", (i) => xScale(X[i]))
-		.attr("y", (i) => yScale(Y[i]))
+		.attr("x", (i) => xScale(x[i]))
+		.attr("y", (i) => yScale(y[i]))
 		.attr("height", (i) => yScale(0) - yScale(count.get(i)))
 		.attr("width", xScale.bandwidth());
 
@@ -83,18 +77,14 @@ function Histogram(data, { x, y, yLabel } = {}) {
 	height = 500;
 
 	xRange = [marginLeft, width - marginRight];
-	yType = d3.scaleLinear;
 	yRange = [height - marginBottom, marginTop];
 	xPadding = 0.1;
 
 	const X = d3.map(data, x);
 	const Y = d3.map(data, y);
 
-	xDomain = new d3.InternSet(X);
-	yDomain = [0, d3.max(Y)];
-
-	const xScale = d3.scaleBand(xDomain, xRange).padding(xPadding);
-	const yScale = yType(yDomain, yRange);
+	const xScale = d3.scaleBand(X, xRange).padding(xPadding);
+	const yScale = d3.scaleLinear([0, d3.max(Y)], yRange);
 	const xAxis = d3.axisBottom(xScale);
 	const yAxis = d3.axisLeft(yScale).ticks(height / 20);
 
@@ -335,6 +325,7 @@ async function display(variable) {
 		}
 	}
 	count = new Map([...count.entries()].sort());
+
 	var sortedValues = new Map([...count.entries()].sort((a, b) => b[1] - a[1]));
 	if (sortedValues.size > 6) {
 		temp = Array.from(sortedValues).slice(5, sortedValues.size);
