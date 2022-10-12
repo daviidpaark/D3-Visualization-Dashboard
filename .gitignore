@@ -1,2 +1,4 @@
 *.mov
 *.7z
+.idea
+__pycache__
