@@ -1,0 +1,44 @@
+Correlation Matrix:
+	Pros:
+		Good for identifying patterns between variables of a dataset
+		Can uncover hidden relationships between variables
+	Cons:
+		Can't visualize or display detailed relationships between individual data points
+		Doesn't explain correlations
+
+Scatterplot Matrix:
+	Pros:
+		Good for displaying general overview of dataset and showing patterns of correlation
+		Finding outliers
+	Cons:
+		Limited to 2 variables per cell
+		Identifying trends and correlation can be subjective
+
+Parallel Coordinates:
+	Pros:
+		Good at displaying high dimensions of data
+		Can show grouping of many datapoints in relation to each other
+	Cons:
+		Requires some preprocessing of data to determine axes location
+		Could be difficult to read
+
+PCA Plot:
+	Pros:
+		Good at showing similar data in clusters
+		Increases readability of high dimension dataset
+	Cons:
+		Data needs to be preprocessed before creation
+		Information is lost 
+
+Biplot:
+	Pros:
+		Good at displaying high dimensional data
+	Cons:
+		Correlation between variables is not as obvious
+
+MDS:
+	Pros:
+		Good at highlighting similarities/dissimilarities between datapoints
+		Useful for mapping from differences
+	Cons:
+		Limited to a 2D/3D display of data

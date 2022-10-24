@@ -12,7 +12,7 @@ def data():
 
 
 @app.route('/corr')
-def correlation():  # put application's code here
+def correlation():
     return df.corr().to_csv()
 
 
