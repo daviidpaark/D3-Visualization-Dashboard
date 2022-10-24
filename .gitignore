@@ -1,4 +1,7 @@
 *.mov
+*.mkv
+*.mp4
+*.png
 *.7z
 .idea
 __pycache__
