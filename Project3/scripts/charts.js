@@ -1,5 +1,5 @@
-async function renderCharts() {
-	var data = await d3.csv("http://127.0.0.1:5000/");
+async function correlationMatrix() {
+	var data = await d3.csv("http://127.0.0.1:5000/corr");
 
 	var marginTop = 20;
 	var marginRight = 20;
@@ -8,13 +8,20 @@ async function renderCharts() {
 	var width = 700 - marginLeft - marginRight;
 	var height = 700 - marginTop - marginBottom;
 
+	d3.select("body")
+		.append("text")
+		.style("font-size", "1.5em")
+		.style("font-weight", "bold")
+		.text("Correlation Matrix");
+
 	const svg = d3
-		.select("#graph")
+		.select("body")
+		.append("div")
 		.append("svg")
 		.attr("width", width + marginLeft + marginRight)
 		.attr("height", height + marginTop + marginBottom);
 
-	d3.csv("http://127.0.0.1:5000/").then((elements) => {
+	d3.csv("http://127.0.0.1:5000/corr").then((elements) => {
 		elements.forEach((d) => {
 			let x = d[""];
 			delete d[""];
@@ -97,4 +104,102 @@ async function renderCharts() {
 				}
 			});
 	});
+}
+
+async function scatterplotMatrix() {}
+
+async function parallelCoordinates() {
+	var marginTop = 30;
+	var marginRight = 10;
+	var marginBottom = 10;
+	var marginLeft = 0;
+	var width = 1200 - marginLeft - marginRight;
+	var height = 700 - marginTop - marginBottom;
+
+	d3.select("body")
+		.append("text")
+		.style("font-size", "1.5em")
+		.style("font-weight", "bold")
+		.text("Parallel Coordinates");
+
+	var svg = d3
+		.select("body")
+		.append("div")
+		.append("svg")
+		.attr("width", width + marginLeft + marginRight)
+		.attr("height", height + marginTop + marginBottom)
+		.append("g")
+		.attr("transform", "translate(" + marginLeft + "," + marginTop + ")");
+
+	d3.csv("http://127.0.0.1:5000/data").then((data) => {
+		dimensions = [
+			"Max_resolution",
+			"Effective_pixels",
+			"Weight",
+			"Zoom_tele",
+			"Zoom_wide",
+			"Normal_focus_range",
+			"Macro_focus_range",
+			"Storage",
+			"Low_resolution",
+			"Price",
+		];
+
+		const y = {};
+		for (i in dimensions) {
+			label = dimensions[i];
+			y[label] = d3
+				.scaleLinear()
+				.domain(
+					d3.extent(data, (d) => {
+						return +d[label];
+					})
+				)
+				.range([height, 0]);
+		}
+
+		x = d3.scalePoint().range([0, width]).padding(1).domain(dimensions);
+
+		function path(d) {
+			return d3.line()(
+				dimensions.map((p) => {
+					return [x(p), y[p](d[p])];
+				})
+			);
+		}
+
+		svg
+			.selectAll("lines")
+			.data(data)
+			.join("path")
+			.attr("d", path)
+			.style("fill", "none")
+			.style("stroke", "green")
+			.style("opacity", 0.5);
+
+		svg
+			.selectAll("labels")
+			.data(dimensions)
+			.enter()
+			.append("g")
+			.attr("transform", (d) => {
+				return "translate(" + x(d) + ")";
+			})
+			.each(function (d) {
+				d3.select(this).call(d3.axisLeft().scale(y[d]));
+			})
+			.append("text")
+			.style("text-anchor", "middle")
+			.attr("y", -9)
+			.text((d) => {
+				return d;
+			})
+			.style("fill", "black");
+	});
+}
+
+async function renderCharts() {
+	await correlationMatrix();
+	await scatterplotMatrix();
+	await parallelCoordinates();
 }
