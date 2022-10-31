@@ -479,9 +479,6 @@ async function parallelCoordinates() {
 async function display(variable) {
 	d3.select("#graph").selectAll("text").remove();
 	d3.select("#graph").selectAll("svg").remove();
-	var data = await d3.csv("http://127.0.0.1:5001/data");
-	var pca = await d3.csv("http://127.0.0.1:5001/pca");
-	var mds = await d3.csv("http://127.0.0.1:5001/mds");
 
 	var count = new Map();
 	for (var i = 0; i < data.length; i++) {
@@ -555,6 +552,16 @@ async function scatter() {
 
 var x = 0;
 var y = 0;
+
+let data;
+let pca;
+let mds;
+
+async function loadData() {
+	data = await d3.csv("http://127.0.0.1:5001/data");
+	pca = await d3.csv("http://127.0.0.1:5001/pca");
+	mds = await d3.csv("http://127.0.0.1:5001/mds");
+}
 
 function setX(value) {
 	x = value;
