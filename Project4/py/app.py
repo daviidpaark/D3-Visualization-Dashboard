@@ -1,4 +1,5 @@
 from flask import Flask
+from flask_cors import CORS
 import pandas as pd
 from sklearn.decomposition import PCA
 from sklearn.preprocessing import StandardScaler
@@ -6,6 +7,7 @@ from sklearn.manifold import MDS
 from sklearn.metrics.pairwise import euclidean_distances
 
 app = Flask(__name__)
+CORS(app)
 
 df = pd.read_csv('data/cameras.csv')
 
