@@ -1,0 +1,3 @@
+Report:
+	Hard to visually find correlation between barchart and other plots
+	Easier to visually see correlation with other plots because more dimensions are visualized
