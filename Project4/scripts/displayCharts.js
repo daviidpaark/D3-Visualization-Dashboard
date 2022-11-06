@@ -267,7 +267,7 @@ function PieChart(data, { name, value, label } = {}) {
 		.text((d) => d);
 }
 
-function Scatterplot(data, { x, y, xLabel, yLabel, label } = {}) {
+function Scatterplot(data, { x, y, xLabel, yLabel, axes, label } = {}) {
 	marginTop = 20;
 	marginRight = 30;
 	marginBottom = 30;
@@ -352,6 +352,19 @@ function Scatterplot(data, { x, y, xLabel, yLabel, label } = {}) {
 				.attr("text-anchor", "start")
 				.text(yLabel)
 		);
+
+	if (axes) {
+		for (var i = 0; i < features.length; i++) {
+			svg
+				.append("line")
+				.attr("x1", xScale(0))
+				.attr("y1", yScale(0))
+				.attr("x2", xScale(axes[0][features[i]]))
+				.attr("y2", yScale(axes[1][features[i]]))
+				.attr("stroke", "black")
+				.attr("stroke-width", 1);
+		}
+	}
 
 	svg
 		.append("g")
@@ -521,6 +534,7 @@ async function display(variable) {
 		y: (d) => parseFloat(d["PC2"]),
 		xLabel: "PC1",
 		yLabel: "PC2",
+		axes: biplot,
 		label: "Biplot",
 	});
 
@@ -554,11 +568,25 @@ var x = 0;
 var y = 0;
 
 let data;
+let biplot;
 let pca;
 let mds;
+const features = [
+	"Max_resolution",
+	"Low_resolution",
+	"Effective_pixels",
+	"Zoom_wide",
+	"Zoom_tele",
+	"Normal_focus_range",
+	"Macro_focus_range",
+	"Storage",
+	"Weight",
+	"Price",
+];
 
 async function loadData() {
 	data = await d3.csv("http://127.0.0.1:5001/data");
+	biplot = await d3.csv("http://127.0.0.1:5001/biplot");
 	pca = await d3.csv("http://127.0.0.1:5001/pca");
 	mds = await d3.csv("http://127.0.0.1:5001/mds");
 }
