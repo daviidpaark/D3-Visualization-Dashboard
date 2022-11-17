@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<title>CSE 332</title>
+		<link
+			href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css"
+			rel="stylesheet"
+			integrity="sha384-iYQeCzEYFbKjA/T2uDLTpkwGzCiq6soy8tYaI1GyVh/UjpbCx/TYkiZhlZB6+fzT"
+			crossorigin="anonymous"
+		/>
+	</head>
+	<body>
+		<div class="container-fluid">
+			<h1>Project 5</h1>
+			<div class="dropdown">
+				<!-- <button
+					class="btn btn-secondary dropdown-toggle"
+					type="button"
+					data-bs-toggle="dropdown"
+				>
+					Select a variable
+				</button>
+				<ul class="dropdown-menu">
+					<li>
+						<button
+							class="dropdown-item"
+							onclick="display(this.value)"
+							value="Max_resolution"
+						>
+							Max Resolution
+						</button>
+					</li>
+					<li>
+						<button
+							class="dropdown-item"
+							onclick="display(this.value)"
+							value="Low_resolution"
+						>
+							Low Resolution
+						</button>
+					</li>
+					<li>
+						<button
+							class="dropdown-item"
+							onclick="display(this.value)"
+							value="Effective_pixels"
+						>
+							Effective Pixels
+						</button>
+					</li>
+					<li>
+						<button
+							class="dropdown-item"
+							onclick="display(this.value)"
+							value="Zoom_wide"
+						>
+							Zoom Wide
+						</button>
+					</li>
+					<li>
+						<button
+							class="dropdown-item"
+							onclick="display(this.value)"
+							value="Zoom_tele"
+						>
+							Zoom Tele
+						</button>
+					</li>
+					<li>
+						<button
+							class="dropdown-item"
+							onclick="display(this.value)"
+							value="Normal_focus_range"
+						>
+							Normal Focus Range
+						</button>
+					</li>
+					<li>
+						<button
+							class="dropdown-item"
+							onclick="display(this.value)"
+							value="Macro_focus_range"
+						>
+							Macro Focus Range
+						</button>
+					</li>
+					<li>
+						<button
+							class="dropdown-item"
+							onclick="display(this.value)"
+							value="Storage"
+						>
+							Storage
+						</button>
+					</li>
+					<li>
+						<button
+							class="dropdown-item"
+							onclick="display(this.value)"
+							value="Weight"
+						>
+							Weight
+						</button>
+					</li>
+					<li>
+						<button
+							class="dropdown-item"
+							onclick="display(this.value)"
+							value="Price"
+						>
+							Price
+						</button>
+					</li> 
+				</ul> -->
+				<!-- <div class="row" style="padding: 15px">
+					<div class="col-4">
+						<select class="form-select" onclick="setX(this.value)">
+							<option selected>Select X</option>
+							<option value="Max_resolution" onclick="">Max Resolution</option>
+							<option value="Low_resolution" onclick="">Low Resolution</option>
+							<option value="Effective_pixels" onclick="">
+								Effective Pixels
+							</option>
+							<option value="Zoom_wide" onclick="">Zoom Wide</option>
+							<option value="Zoom_tele" onclick="">Zoom Tele</option>
+							<option value="Normal_focus_range" onclick="">
+								Normal Focus Range
+							</option>
+							<option value="Macro_focus_range" onclick="">
+								Macro Focus Range
+							</option>
+							<option value="Storage" onclick="">Storage</option>
+							<option value="Weight" onclick="">Weight</option>
+							<option value="Price" onclick="">Price</option>
+						</select>
+					</div>
+					<div class="col-4">
+						<select class="form-select" onclick="setY(this.value)">
+							<option selected>Select Y</option>
+							<option value="Max_resolution" onclick="">Max Resolution</option>
+							<option value="Low_resolution" onclick="">Low Resolution</option>
+							<option value="Effective_pixels" onclick="">
+								Effective Pixels
+							</option>
+							<option value="Zoom_wide" onclick="">Zoom Wide</option>
+							<option value="Zoom_tele" onclick="">Zoom Tele</option>
+							<option value="Normal_focus_range" onclick="">
+								Normal Focus Range
+							</option>
+							<option value="Macro_focus_range" onclick="">
+								Macro Focus Range
+							</option>
+							<option value="Storage" onclick="">Storage</option>
+							<option value="Weight" onclick="">Weight</option>
+							<option value="Price" onclick="">Price</option>
+						</select>
+					</div>
+					<div class="col-4">
+						<button type="button" class="btn btn-primary" onclick="scatter()">
+							Scatterplot
+						</button>
+					</div>
+				</div>
+			</div> -->
+				<div class="container">
+					<div class="row">
+						<div class="col" id="graph1"></div>
+						<div class="col" id="graph2"></div>
+					</div>
+					<div class="row">
+						<div class="col" id="graph3"></div>
+						<div class="col" id="graph4"></div>
+					</div>
+				</div>
+				<script
+					src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/js/bootstrap.bundle.min.js"
+					integrity="sha384-u1OknCvxWvY5kfmNBILK2hRnQC3Pr17a+RTT6rIHI7NnikvbZlHgTPOOmMi466C8"
+					crossorigin="anonymous"
+				></script>
+				<script src="https://d3js.org/d3.v7.min.js"></script>
+				<script src="/scripts/displayCharts.js"></script>
+				<script>
+					renderCharts();
+				</script>
+				<style>
+					.selected {
+						opacity: 1 !important;
+						fill: magenta;
+						stroke: magenta;
+						stroke-width: 1px;
+					}
+				</style>
+			</div>
+		</div>
+	</body>
+</html>
